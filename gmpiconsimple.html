@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple Marker Icons</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #mapid {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mapid"></div>
+    <script>
+
+      // This example adds a marker to indicate the position of Bondi Beach in Sydney,
+      // Australia.
+      function initMap() {
+        // API for map object https://developers.google.com/maps/documentation/javascript/reference/map#Map
+        var mapobject = new google.maps.Map(document.getElementById('mapid'), {
+          zoom: 4,
+          center: {lat: -33, lng: 151}
+        });
+        // API for markers: https://developers.google.com/maps/documentation/javascript/reference/marker
+        var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+        var beachMarker = new google.maps.Marker({
+          position: {lat: -33.890, lng: 151.274},
+          map: mapobject,
+          icon: image
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoQrAzKGZ_prpM5rHXY3AwehpLZ0qhT2k&callback=initMap">
+    </script>
+  </body>
+</html>
