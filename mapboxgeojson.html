@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Add live realtime data</title>
+<title>Add GeoJSON from ArcGIS Server</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css" rel="stylesheet" />
@@ -15,13 +15,14 @@
 <div id="map"></div>
 
 <script>
+	// Make sure you use your own Access Token
 	mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhd25tZmxlbWluZ2MiLCJhIjoiY2p2cW54OWd6MHBsNTQzbW82eGdoMnhiayJ9.J0aHRw_EPtUzVsp0aEIS1g';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
         zoom: 0
     });
-
+    // Craft your own map service URL here.
     var url = 'https://luna.flemingcollege.ca/arcgis/rest/services/DemoMapExample/MapServer/0/query?where=1%3D1&returnGeometry=true&returnTrueCurves=false&returnExtentOnly=false&f=geojson';
     map.on('load', function() {
         window.setInterval(function() {
@@ -34,10 +35,7 @@
             'type': 'fill',
             'source': 'canada',
             'layout': {},
-						'paint': {
-						'fill-color': '#088',
-						'fill-opacity': 0.8
-						}
+            'paint': {'fill-color': '#088','fill-opacity': 0.8}
         });
     });
 </script>
