@@ -70,7 +70,7 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
           timeout:8000
         }).then(lang.hitch(this,function(resp){
           if (resp.data.features.length > 0) {
-            FastFacilityForm(resp);
+            DataForm(resp);
           } else {
             document.getElementById("error").innerHTML = "Error: No record found matching id " + urlParams.get("id") + "."
           }
