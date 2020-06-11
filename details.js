@@ -1,9 +1,13 @@
 var dojoConfig = {
   parseOnLoad: true
 };
+/**  
+ * Parameter Usage: details.html?id=<ProjectID>{&debug=true&nofill=true}
+**/
+
 "use strict";    
-  
-var restServiceUrl = 'https://services1.arcgis.com/UGWyiCIH2BDelPqy/arcgis/rest/services/FFPropertiesClients/FeatureServer/0/';
+// collaborative project listings 2020 
+var restServiceUrl = 'https://services1.arcgis.com/pMeXRvgWClLJZr3s/ArcGIS/rest/services/Collaborative_Project_Listings_Public/FeatureServer/0/';
 var outFields = '*';
 var urlParams = new URLSearchParams(window.location.search); // gets all URL parameters
 
@@ -28,7 +32,7 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
   }
   // Called to update form
 
-  function FastFacilityForm(response){  // Only executes after response from server
+  function DataForm(response){  // Only executes after response from server
      
     console.log(response.data.features);
     // this only processes the first returned record [0]
@@ -59,7 +63,7 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
     ], function(
       lang, esriRequest
     ) { 
-      var url = restServiceUrl + "query?where=ID%3D"+urlParams.get("id")+"&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=false&orderByFields=objectid&f=json";
+      var url = restServiceUrl + "query?where=ProjectID%3D"+urlParams.get("id")+"&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=false&orderByFields=ProjectID&f=json";
       esriRequest(url,{
           responseType:'json',
           callbackParamName:'callback',
