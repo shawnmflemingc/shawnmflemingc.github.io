@@ -208,8 +208,8 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
         tableCode += "<td>"+response.data.features[recid].attributes['teammembers'].split(",").join(",<br>")+"</td>";
         tableCode += "</tr>";
         modalCode += '<div id="myModal'+currentProjectId+'" class="modal"><div class="modal-content"><span class="close" id="close'+currentProjectId+'">&times;</span>';
-        modalCode += '<h3>Project: '+currentProjectId+':'+response.data.features[recid].attributes['title']+'</h3>';
-        modalCode += '<h4>Client: '+currentProjectId+':'+response.data.features[recid].attributes['clientorg']+'</h4>';
+        modalCode += '<h3>Project:'+currentProjectId+' '+response.data.features[recid].attributes['title']+'</h3>';
+        modalCode += '<h4>Client:'+response.data.features[recid].attributes['clientorg']+'</h4>';
         modalCode += '<p>Team: '+response.data.features[recid].attributes['teammembers']+'</p>';
         //modalCode += "<p><i>Links to the project website and webex will be available here during the open house</i></p>";
         modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Visit Project Website</a></p>';
