@@ -13,7 +13,8 @@
     var htmlTarget = document.getElementById(key+"val");
     if (htmlTarget) {
       switch (key) {
-        case "WebAddress":
+        case "websiteurl":
+        case "webexurl":
           // Does this need http(s) prior?
           if (!/^https?:\/\//i.test(fieldWorker)) {
             fieldWorker = 'http://' + fieldWorker;
@@ -24,22 +25,13 @@
             htmlTarget.innerHTML = fieldWorker;
           }
           break;
-        case "InputDate":
+        case "EditDate":
           htmlTarget.innerHTML = esriDate(fieldWorker);
           break;
         case "ObjectId": 
           htmlTarget.innerHTML = "!!"+fieldWorker;
           break;
-        case "LPicture":
-          htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
-          break;
-        case "Logo":
-          htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
-          break;
-        case "ID": // just display the ID
-          htmlTarget.innerHTML = fieldWorker;
-          break;
-        case "Zip": // just display a ZIP code
+        case "projectid": // just display the ID
           htmlTarget.innerHTML = fieldWorker;
           break;
         default:  // Adds commas to all number data, displays others
@@ -55,20 +47,19 @@
 </head>
 <body>
 
-    <h1 id="Title">Details</h1>
     <div class="errormessage" id="error"></div>
 <!--Begin SPANS for field values-->
 
-<h1><span id='titleval'></span></h1>
-<h2><span id='clientorgval'></span></h2>
+<h1>P<span id='projectidval'></span> <span id='titleval' class='fieldvalue'></span></h1>
+<h2>Client <span id='clientorgval' class='fieldvalue'></span></h2>
+<h3><span class='fieldvalue' id='shortdescriptionval'></span></h3>
+<p>Visit this team using WebEx: <span class='fieldvalue' id='webexurlval'></span></p>
 <table>
-  <tr><td>Project ID</td><td><span class='fieldvalue' id='projectidval'></span></td></tr>
-  <tr><td>Client</td><td><span class='fieldvalue' id='clientorgval'></span></td></tr>
   <tr><td>Student Team</td><td><span class='fieldvalue' id='teammembersval'></span></td></tr>
-  <tr><td>Description</td><td><span class='fieldvalue' id='shortdescriptionval'></span></td></tr>
+  <tr><td>Project Website</td><td><span class='fieldvalue' id='websiteurlval'></span></td></tr>
   <tr><td>Abstract</td><td><span class='fieldvalue' id='abstractval'></span></td></tr>
 </table>
-
+<p class="greyed">Listing updated: <span id='EditDateval'></span></p> 
 
 <!--End SPANS for field values-->
 

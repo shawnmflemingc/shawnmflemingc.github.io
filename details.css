@@ -4,10 +4,24 @@ body {
 .fieldlabel {
   color:grey;
 }
-.fieldvalue {
-  color:darkgreen;
+
 }
 .errormessage {
   color:darkred;
   font-weight: bolder;
+}
+.fieldvalue {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  border-left: 3px solid #f36d33;
+  color: #666;
+  max-width: 100%;
+  overflow: auto;
+  display: inline;
+  padding: 0.10em;
+  /*display: block;
+  word-wrap: break-word;*/
+}
+  .greyed {
+    font-size: 0.5em;
 }
