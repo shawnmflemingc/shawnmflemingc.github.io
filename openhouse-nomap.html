@@ -167,14 +167,6 @@ a:hover.btn, a:active.btn  {
   cursor: pointer;
 }
 
-#mapDiv {
-      padding: 0;
-      margin: 0;
-      height: 250px;
-      width: 100%;
-    }
-
-
 
 </style>
   <script>
@@ -222,7 +214,6 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
         //modalCode += "<p><i>Links to the project website and webex will be available here during the open house</i></p>";
         modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Visit Project Website</a></p>';
         modalCode += '<p><a href="'+response.data.features[recid].attributes['webexurl']+'" target="_blank">Open House: Click to open WebEx and talk with the team</a></p>';
-        
         modalCode += '<p>Short Description: '+response.data.features[recid].attributes['shortdescription']+'</p>';
         modalCode += '<p>Report Abstract: '+response.data.features[recid].attributes['abstract']+'</p>';
         modalCode += '</div></div>';
@@ -259,42 +250,6 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
 
    }
 
-   function setFeatureLayerViewFilter(expression) {
-        view.whenLayerView(featureLayer).then(function(featureLayerView) {
-          featureLayerView.filter = {
-            where: expression
-          };
-          //*** CHALLENGE - Style the excluded features ***//
-          // featureLayerView.effect = {
-          //   filter: {
-          //     where: expression
-          //   },
-          //   excludedEffect: "opacity(50%)"
-          // }
-        });
-      }
-
-      //*** CHALLENGE: Find and highlight features ***//
-    
-//       var highlight;
-
-//       view.whenLayerView(featureLayer).then(function(featureLayerView) {
-//         view.on("pointer-move", function(event){
-//           view.hitTest(event).then(function(response){
-//             // Only return features for the feature layer
-//             var feature = response.results.filter(function (result) {
-//              return result.graphic.layer === featureLayer;
-//             })[0].graphic;
-//             if (highlight) {
-//              highlight.remove();
-//             }
-//             // Highlight feature
-//             highlight = featureLayerView.highlight(feature);
-//           });
-//         });
-//       });
-
-
 
 
    
@@ -306,33 +261,10 @@ $(function(){
     require([
       "dojo/_base/lang",
       "esri/request",
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/layers/FeatureLayer",
       "dojo/domReady!"
     ], function(
-      lang, esriRequest, Map, MapView, FeatureLayer
+      lang, esriRequest
     ) { 
-      var map = new Map({basemap: "topo-vector"});
-      var view = new MapView({
-        container: "mapDiv",
-        map: map,
-        center: [-78.740903,44.341072], // Lindsay Ontario
-        zoom: 6
-      });
-
-      var featureLayer = new FeatureLayer({
-        url: restServiceUrl,
-        outFields: ["*"],  // Return all fields to client
-        popupTemplate: {  // Enable a popup on client
-          title: "title", // Show field value
-          content: "P{projectid}:{title}"  // Show field value
-        }
-      });
-    
-      map.add(featureLayer);
-
-
       var url = restServiceUrl + "query?where=ProjectID%3E2000&objectIds=&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=false&orderByFields=ProjectID&f=json";
       esriRequest(url,{
           responseType:'json',
@@ -399,7 +331,6 @@ var x = setInterval(function() {
 	<h2>Projects Teams Presenting:</h2>
     <div title="Click on a project entry to learn more" id="AvailableProjectList"><h4>Loading Project List...</h4><p><img class="centreimage" alt="waiting" src="waiting.gif"></p></div>
     <div id="modalCodeInsert"></div>
-    <div id="mapDiv"></div>
 <div id="footer">
 <img id="footer-logo" class="img-responsive" src="https://flemingcollege.ca/i/fleming-college-logo-white.svg" alt="Fleming College logo">
 </div>
