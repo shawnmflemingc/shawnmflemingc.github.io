@@ -23,6 +23,26 @@
 body {
       font-family: "Trebuchet MS";
     }
+
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+/*  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 table, td, th {  
   border: 1px solid #ddd;
   text-align: left;
@@ -186,6 +206,8 @@ var aliasFields = ['P#','Title','Organization','Team Members'];
 //var redirectUri = 'http://userpages.flemingc.on.ca/~shawnm/collab/index.html';
 //var redirectUri = 'http://projects.geocommunity.net/index.html';
 var urlParams = new URLSearchParams(window.location.search); // gets all URL parameters
+var globalview;  // bad coding, but it works. 
+var globalfeatureview;
 
   
   function createTable(response){  // Only executes after response from server
@@ -219,9 +241,9 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
         modalCode += '<h2>Project:'+currentProjectId+' '+response.data.features[recid].attributes['title']+'</h2>';
         modalCode += '<h3>Client:'+response.data.features[recid].attributes['clientorg']+'</h3>';
         modalCode += '<p>Team: '+response.data.features[recid].attributes['teammembers']+'</p>';
-        //modalCode += "<p><i>Links to the project website and webex will be available here during the open house</i></p>";
-        modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Visit Project Website</a></p>';
-        modalCode += '<p><a href="'+response.data.features[recid].attributes['webexurl']+'" target="_blank">Open House: Click to open WebEx and talk with the team</a></p>';
+        modalCode += "<p><i>Links to the project website and webex will be available here during the open house</i></p>";
+        //modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Visit Project Website</a></p>';
+        //modalCode += '<p><a href="'+response.data.features[recid].attributes['webexurl']+'" target="_blank">Open House: Click to open WebEx and talk with the team</a></p>';
         
         modalCode += '<p>Short Description: '+response.data.features[recid].attributes['shortdescription']+'</p>';
         modalCode += '<p>Report Abstract: '+response.data.features[recid].attributes['abstract']+'</p>';
@@ -242,8 +264,9 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
  
     $('#AvailTable tbody').on('click', 'tr', function () {
         var data = table.row( this ).data();
-        var modal = document.getElementById("myModal"+data[0])
+        var modal = document.getElementById("myModal"+data[0]);
         modal.style.display = "block";
+        setFeatureLayerViewFilter('projectid='+data[0]);
       // When the user clicks anywhere outside of the modal, close it
       window.onclick = function(event) {
         if (event.target == modal) {
@@ -254,23 +277,21 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
         document.getElementById("close"+data[0]).onclick = function() {
         modal.style.display = "none";
       }
+   //   setFeatureLayerViewFilter("projectid="+data[0]);
         //window.location.href = 'projectviewer.html?id='+data[0];
     } );
 
    }
 
    function setFeatureLayerViewFilter(expression) {
-        view.whenLayerView(featureLayer).then(function(featureLayerView) {
-          featureLayerView.filter = {
-            where: expression
-          };
-          //*** CHALLENGE - Style the excluded features ***//
-          // featureLayerView.effect = {
-          //   filter: {
-          //     where: expression
-          //   },
-          //   excludedEffect: "opacity(50%)"
-          // }
+        globalview.whenLayerView(globalfeaturelayer).then(function(featureLayerView) {
+          
+           featureLayerView.effect = {
+             filter: {
+               where: expression
+             },
+             excludedEffect: "opacity(25%)"
+           }
         });
       }
 
@@ -318,7 +339,16 @@ $(function(){
         container: "mapDiv",
         map: map,
         center: [-78.740903,44.341072], // Lindsay Ontario
-        zoom: 6
+        zoom: 5,
+        popup: {
+            dockEnabled: true,
+            dockOptions: {
+              // Disables the dock button from the popup
+              buttonEnabled: false,
+              // Ignore the default sizes that trigger responsive docking
+              breakpoint: false,
+            }
+          }
       });
 
       var featureLayer = new FeatureLayer({
@@ -326,14 +356,17 @@ $(function(){
         outFields: ["*"],  // Return all fields to client
         popupTemplate: {  // Enable a popup on client
           title: "P{projectid}:{title}", // Show field value
-          content: "{shortdescription}"  // Show field value
+          content: "{shortdescription}",  // Show field value
+		  lastEditInfoEnabled: false
         }
       });
     
       map.add(featureLayer);
+      globalview = view;
+      globalfeaturelayer = featureLayer;
 
 
-      var url = restServiceUrl + "query?where=ProjectID%3E2000&objectIds=&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=false&orderByFields=ProjectID&f=json";
+      var url = restServiceUrl + "query?where=ProjectID%3E2000&objectIds=&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=true&orderByFields=ProjectID&f=json";
       esriRequest(url,{
           responseType:'json',
           callbackParamName:'callback',
@@ -386,17 +419,25 @@ var x = setInterval(function() {
 
 <body>
 
-    <h1 id="Title"><img src="https://geocommunity.net/FlemingGIS_000_SM.png" width="51">&nbsp;Open House 2020 Attendance Portal</h1>
-	<p>
-	On Friday June 26th 2020 from 11:30am through 1:30pm (eastern time) return to this site to attend the open house. Each of the projects (below) 
-	will have their own Webex Channel open during these hours so that you can interact and talk with the students, learn about their project, as well a website you can visit to
-	learn more. Bookmark and return to this site on June 26th!
-	</p>
-    <p>This is a public event, and we encourage you to pass this invite along to anyone you think is interested in coming (coworkers, friends, family, etc.). 
-	If you know you’ll be joining us please fill out our RSVP form to help us better plan our event</p> 
+    <h1 id="Title"><img src="https://geocommunity.net/FlemingGIS_000_SM.png" width="51">&nbsp;Virtual (WebEx) GIS Open House 2020</h1>
+    <p>You are formally invited to attend our GIS program open house to meet, interact and talk with the 2020 class and their projects <i>from anywhere</i>.</p>
+    <div class="row">
+      <div class="column">
+        <ul>
+        <li><i>When:</i> Friday June 26th 2020 from 11:30am through 1:30pm (eastern time)</li>
+        <li><i>How:</i> Attend ONLINE from anywhere using WebEx. Links will be provided on this webpage just before and during the event</li>
+      </ul>
+      </div>
+      <div class="column">
+        <p>Optionally RSVP to recieve an email with WebEx link about a day before the event</p>
+        <p>OR Return to this site during the event to see all the links for each team</p>
+      </div>
+    </div>	
+    <p>This is a <strong>public event</strong>, share with anyone interested in coming (coworkers, friends, family, etc.). 
+	Optionally RSVP to recieve and email reminder with attendance WebEx links prior to the event!</p> 
 	<p class="centreit"><a class="btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=Q3GnBlHhIkeO-9W3oKU_VElsCgrl_rlOpn9H_fTgittUOEFHTU9VUVBDVlRNVU5DV1kxTlc2VTRMQy4u" target="_blank">Event RSVP Form</a> Open house starts in: <strong id="timer"></strong></p>
-	<p>If you’d like to track this event on Facebook, <a href="https://www.facebook.com/events/846711282486144/" target="_blank">you can check out our event page here</a>.</p>
-	<h2>Projects Teams Presenting:</h2>
+	<p class="centreit">Facebook page: <a href="https://www.facebook.com/events/846711282486144/" target="_blank"><img src="https://facebookbrand.com/wp-content/uploads/2019/04/f_logo_RGB-Hex-Blue_512.png" alt="Facebook event page" width="25" height="25"></a></p>
+	<h2>Project List and Teams:</h2>
     <div title="Click on a project entry to learn more" id="AvailableProjectList"><h4>Loading Project List...</h4><p><img class="centreimage" alt="waiting" src="waiting.gif"></p></div>
     <div id="modalCodeInsert"></div>
     <div id="mapDiv"></div>
