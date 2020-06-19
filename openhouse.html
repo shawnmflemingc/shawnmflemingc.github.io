@@ -242,7 +242,10 @@ var globalfeatureview;
         modalCode += '<h3>Client:'+response.data.features[recid].attributes['clientorg']+'</h3>';
         modalCode += '<p>Team: '+response.data.features[recid].attributes['teammembers']+'</p>';
         modalCode += "<p><i>Links to the project website and webex will be available here during the open house</i></p>";
-        modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Open '+response.data.features[recid].attributes['title']+' Website</a></p>';
+	if (response.data.features[recid].attributes['title'] <> null) {
+	     modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Open '+response.data.features[recid].attributes['title']+' Website</a></p>';
+        }
+	     
         //modalCode += '<p><a href="'+response.data.features[recid].attributes['webexurl']+'" target="_blank">Open House: Click to open WebEx and talk with the team</a></p>';
         
         modalCode += '<p>Short Description: '+response.data.features[recid].attributes['shortdescription']+'</p>';
