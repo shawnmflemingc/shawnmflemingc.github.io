@@ -28,6 +28,9 @@ body {
   box-sizing: border-box;
 }
 
+.label { color: gray; }
+.labelindent {text-indent: 25px;}
+
 /* Create two equal columns that floats next to each other */
 .column {
   float: left;
@@ -238,18 +241,20 @@ var globalfeatureview;
         tableCode += "<td>"+response.data.features[recid].attributes['teammembers'].split(",").join(",<br>")+"</td>";
         tableCode += "</tr>";
         modalCode += '<div id="myModal'+currentProjectId+'" class="modal"><div class="modal-content"><span class="close" id="close'+currentProjectId+'">&times;</span>';
-        modalCode += '<h2>Project:'+currentProjectId+' '+response.data.features[recid].attributes['title']+'</h2>';
-        modalCode += '<h3>Client:'+response.data.features[recid].attributes['clientorg']+'</h3>';
-        modalCode += '<p>Team: '+response.data.features[recid].attributes['teammembers']+'</p>';
+        modalCode += '<h2>'+currentProjectId+' '+response.data.features[recid].attributes['title']+'</h2>';
+        modalCode += '<h3>'+response.data.features[recid].attributes['clientorg']+'</h3>';
+        modalCode += '<p>Team:'+response.data.features[recid].attributes['teammembers']+'</p>';
         modalCode += "<p><i>Links to the project website and webex will be available here during the open house</i></p>";
-	if (response.data.features[recid].attributes['websiteurl']) {
-	     modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Open '+response.data.features[recid].attributes['title']+' Website</a></p>';
+        if (response.data.features[recid].attributes['websiteurl']) {
+            modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Open '+response.data.features[recid].attributes['title']+' Website</a></p>';
         }
 	     
         //modalCode += '<p><a href="'+response.data.features[recid].attributes['webexurl']+'" target="_blank">Open House: Click to open WebEx and talk with the team</a></p>';
         
-        modalCode += '<p>Short Description: '+response.data.features[recid].attributes['shortdescription']+'</p>';
-        modalCode += '<p>Report Abstract: '+response.data.features[recid].attributes['abstract']+'</p>';
+        modalCode += '<p><div class="label">Short Description:</div>'+response.data.features[recid].attributes['shortdescription']+'</p>';
+        if (response.data.features[recid].attributes['abstract']) {
+          modalCode += '<p><div class="label">Report Abstract:</div>'+response.data.features[recid].attributes['abstract']+'</p>';
+        }
         modalCode += '</div></div>';
      };
      tableCode += "</tbody></table>";
