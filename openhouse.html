@@ -137,16 +137,17 @@ th, td {
 }
 
 a:link.btn, a:visited.btn {
-  background-color: #f44336;
+  background-color: #289c5d;
   color: white;
   padding: 14px 25px;
+  font-size: 1.2em;
   text-align: center;
   text-decoration: none;
   display: inline-block;
 }
 
 a:hover.btn, a:active.btn  {
-  background-color: red;
+  background-color: rgb(0, 231, 0);
 }
 
 .centreit {text-align: center;}
@@ -211,7 +212,6 @@ var aliasFields = ['P#','Title','Organization','Team Members'];
 var urlParams = new URLSearchParams(window.location.search); // gets all URL parameters
 var globalview;  // bad coding, but it works. 
 var globalfeatureview;
-
   
   function createTable(response){  // Only executes after response from server
 
@@ -246,10 +246,11 @@ var globalfeatureview;
         modalCode += '<p>Team:'+response.data.features[recid].attributes['teammembers']+'</p>';
         modalCode += "<p><i>Links to the project website and webex will be available here during the open house</i></p>";
         if (response.data.features[recid].attributes['websiteurl']) {
-            modalCode += '<p><a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">Open '+response.data.features[recid].attributes['title']+' Website</a></p>';
+            modalCode += '<p>Open the team website: <a href="'+response.data.features[recid].attributes['websiteurl']+'" target="_blank">'+response.data.features[recid].attributes['title']+'</a></p>';
         }
 	     
-        //modalCode += '<p><a href="'+response.data.features[recid].attributes['webexurl']+'" target="_blank">Open House: Click to open WebEx and talk with the team</a></p>';
+        //modalCode += '<p>Open House: <a class="btn" href="'+response.data.features[recid].attributes['webexurl']+'" target="_blank">Talk with the team</a> using WebEx</p>';
+        modalCode += '<p>Open House: <a class="btn" onclick="alert(\'You have to wait until the event starts!\');" href="" target="_blank">Talk with the team</a> using WebEx</p>';
         
         modalCode += '<p><div class="label">Short Description:</div>'+response.data.features[recid].attributes['shortdescription']+'</p>';
         if (response.data.features[recid].attributes['abstract']) {
@@ -427,24 +428,23 @@ var x = setInterval(function() {
 
 <body>
 
-    <h1 id="Title"><img src="https://geocommunity.net/FlemingGIS_000_SM.png" width="51">&nbsp;Virtual (WebEx) GIS Open House 2020</h1>
+    <h1 id="Title"><img src="https://geocommunity.net/FlemingGIS_000_SM.png" alt="GIS logo" width="51">&nbsp;Virtual (WebEx) GIS Open House 2020</h1>
     <p>You are formally invited to attend our GIS program open house to meet, interact and talk with the 2020 class and their projects <i>from anywhere</i>.</p>
     <div class="row">
       <div class="column">
         <ul>
         <li><i>When:</i> Friday June 26th 2020 from 11:30am through 1:30pm (eastern time)</li>
-        <li><i>How:</i> Attend ONLINE from anywhere using WebEx. Links will be provided on this webpage just before and during the event</li>
+        <li><i>How:</i> Attend ONLINE from anywhere using WebEx. Links are provided on this webpage during the event</li>
       </ul>
       </div>
       <div class="column">
-        <p>Optionally RSVP to recieve an email with WebEx link about a day before the event</p>
-        <p>OR Return to this site during the event to see all the links for each team</p>
+        <p>Open the main room to have an overview of each project, OR visit a specific team by going directly to their WebEx room. Links to each group's WebEx are provided by clicking on their project in the list below!</p>
       </div>
     </div>	
-    <p>This is a <strong>public event</strong>, share with anyone interested in coming (coworkers, friends, family, etc.). 
-	Optionally RSVP to recieve and email reminder with attendance WebEx links prior to the event!</p> 
-	<p class="centreit"><a class="btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=Q3GnBlHhIkeO-9W3oKU_VElsCgrl_rlOpn9H_fTgittUOEFHTU9VUVBDVlRNVU5DV1kxTlc2VTRMQy4u" target="_blank">Event RSVP Form</a> Open house starts in: <strong id="timer"></strong></p>
-	<p class="centreit">Facebook page: <a href="https://www.facebook.com/events/846711282486144/" target="_blank"><img src="https://facebookbrand.com/wp-content/uploads/2019/04/f_logo_RGB-Hex-Blue_512.png" alt="Facebook event page" width="25" height="25"></a></p>
+    <p>This is a <strong>public event</strong>, share with anyone interested in coming (coworkers, friends, family, etc.).</p> 
+<!--	<p class="centreit"><a class="btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=Q3GnBlHhIkeO-9W3oKU_VElsCgrl_rlOpn9H_fTgittUOEFHTU9VUVBDVlRNVU5DV1kxTlc2VTRMQy4u" target="_blank">Event RSVP Form</a> Open house starts in: <strong id="timer"></strong></p>-->
+<p class="centreit"><a class="btn" onclick="alert('Not yet! When the open house starts this button will work!');" href="">Open the WebEx Main Room</a> Open house starts in: <strong id="timer"></strong></p>
+<p class="centreit">Facebook page: <a href="https://www.facebook.com/events/846711282486144/" target="_blank"><img src="https://facebookbrand.com/wp-content/uploads/2019/04/f_logo_RGB-Hex-Blue_512.png" alt="Facebook event page" width="25" height="25"></a></p>
 	<h2>Project List and Teams:</h2>
     <div title="Click on a project entry to learn more" id="AvailableProjectList"><h4>Loading Project List...</h4><p><img class="centreimage" alt="waiting" src="waiting.gif"></p></div>
     <div id="modalCodeInsert"></div>
